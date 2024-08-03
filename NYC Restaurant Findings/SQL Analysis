@@ -1,0 +1,80 @@
+-- Show the entire dataset.
+SELECT *
+FROM rent-data-362500.Restaurant_ratings.restaurant_ratings;
+
+-- How many records are in the dataset?
+SELECT COUNT(*)
+FROM rent-data-362500.Restaurant_ratings.restaurant_ratings;
+
+-- What is the first and last inspection date in the dataset?
+SELECT MIN(INSPECTION_DATE),
+       MAX(INSPECTION_DATE)
+FROM rent-data-362500.Restaurant_ratings.restaurant_ratings;
+
+-- Count the number of inspection date records containing ’1900-01-01’.
+-- This is the number of null values or values that did not contain an actual inspection date.
+SELECT COUNT(INSPECTION_DATE)
+FROM rent-data-362500.Restaurant_ratings.restaurant_ratings
+WHERE INSPECTION_DATE = '1900-01-01';
+
+-- Count how many record cells are empty or null in Grade.
+SELECT COUNTIF(GRADE IS NULL)
+FROM rent-data-362500.Restaurant_ratings.restaurant_ratings;
+
+-- What are the cuisine options in this dataset?
+SELECT DISTINCT(CUISINE_DESCRIPTION)
+FROM rent-data-362500.Restaurant_ratings.restaurant_ratings;
+
+-- What are the top 10 cuisines in Brooklyn with an A rating in descending order?
+SELECT CUISINE_DESCRIPTION,
+       COUNT(GRADE) AS NUMBER_OF_A_RATINGS
+FROM rent-data-362500.Restaurant_ratings.restaurant_ratings
+WHERE GRADE = 'A' AND BORO = 'Brooklyn'
+GROUP BY CUISINE_DESCRIPTION
+ORDER BY COUNT(GRADE) DESC
+LIMIT 10;
+
+-- How many citations were given each day?
+-- What is the maximum, minimum, and average number of grades given over time?
+SELECT INSPECTION_DATE,
+       COUNT(INSPECTION_DATE) AS NUMBER_OF_INSPECTIONS
+FROM rent-data-362500.Restaurant_ratings.restaurant_ratings
+GROUP BY INSPECTION_DATE;
+
+-- What are the number of citations per critical flag ranked from least to greatest?
+SELECT CRITICAL_FLAG,
+       COUNT() AS NUMBER_OF_CRITICAL_FLAGS,
+       RANK() OVER (ORDER BY COUNT() ASC) AS RANK
+FROM rent-data-362500.Restaurant_ratings.restaurant_ratings
+GROUP BY CRITICAL_FLAG;
+
+-- How many grades are in each grade category followed by a rating?
+SELECT GRADE,
+       CASE
+           WHEN GRADE = 'A' THEN 'Excellent'
+           WHEN GRADE = 'B' THEN 'Great'
+           WHEN GRADE = 'C' THEN 'Average'
+           ELSE 'Needs Improvement'
+       END AS RATING,
+       COUNT(GRADE) AS COUNT_OF_GRADES
+FROM rent-data-362500.Restaurant_ratings.restaurant_ratings
+GROUP BY GRADE
+ORDER BY COUNT(GRADE) DESC;
+
+-- What are the minimum, maximum, and average score for each grade category?
+SELECT GRADE,
+       MIN(SCORE),
+       MAX(SCORE),
+       ROUND(AVG(SCORE), 0)
+FROM rent-data-362500.Restaurant_ratings.restaurant_ratings
+WHERE SCORE != 0
+GROUP BY GRADE;
+
+-- What are the same factors for the cuisine categories?
+SELECT CUISINE_DESCRIPTION,
+       MIN(SCORE),
+       MAX(SCORE),
+       ROUND(AVG(SCORE), 0)
+FROM rent-data-362500.Restaurant_ratings.restaurant_ratings
+WHERE SCORE != 0
+GROUP BY CUISINE_DESCRIPTION;
