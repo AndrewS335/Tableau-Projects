@@ -1,0 +1,208 @@
+This SQL code scripted for various descriptive analysis performed on the dataset. 
+
+--Preview the table
+SELECT
+  *
+FROM 
+  `rent-data-362500.Rent_Data.Rent`;
+  
+--Check for null values in the Posted_On (column 1)
+SELECT
+  *
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+WHERE 
+  Posted_On IS NULL;
+  
+--Check for null values in the BHK (column 2)
+SELECT 
+  BHK
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+WHERE 
+  BHK IS NULL;
+  
+--Check for null values in the RENT (column 3)
+SELECT 
+  RENT
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+WHERE 
+  RENT IS NULL;
+
+--Check for null values in the SIZE (column 4)
+SELECT 
+  SIZE
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+WHERE 
+  SIZE IS NULL;
+  
+--Check for null values in the FLOOR (column 5)
+SELECT 
+  FLOOR
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+WHERE 
+  FLOOR IS NULL;
+  
+--Check for null values in the AREA_TYPE (column 6)
+SELECT 
+  AREA_TYPE
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+WHERE 
+  AREA_TYPE IS NULL;
+  
+ --Check for null values in the AREA_LOCALITY (column 7) 
+ SELECT 
+  AREA_LOCALITY
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+WHERE 
+  AREA_LOCALITY IS NULL;
+  
+ --Check for null values in the CITY (column 8) 
+ SELECT 
+  CITY
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+WHERE 
+  CITY IS NULL;
+ 
+ --Check for null values in the FURNISHING_STATUS (column 9) 
+SELECT 
+ FURNISHING_STATUS
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+WHERE 
+  FURNISHING_STATUS IS NULL;
+
+--Check for null values in the TENANT_PREFERRED (column 10) 
+SELECT 
+ TENANT_PREFERRED
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+WHERE 
+  TENANT_PREFERRED IS NULL;
+
+--Check for null values in the BATHROOM (column 11) 
+SELECT 
+ BATHROOM
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+WHERE 
+  BATHROOM IS NULL;
+  
+--Check for null values in the POINT_OF_CONTACT (column 12) 
+SELECT 
+ POINT_OF_CONTACT
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+WHERE 
+  POINT_OF_CONTACT IS NULL;
+  
+--Show Distinct CITY in the dataset
+SELECT 
+  DISTINCT (CITY)
+FROM 
+  `rent-data-362500.Rent_Data.Rent`;
+
+--Show Distinct AREA_TYPE in the dataset
+SELECT 
+  DISTINCT (AREA_TYPE)
+FROM 
+  `rent-data-362500.Rent_Data.Rent`;
+
+--Show Distinct SIZE in the dataset
+SELECT 
+  DISTINCT (SIZE)
+FROM 
+  `rent-data-362500.Rent_Data.Rent`;
+  
+--Find the earliest and latest POSTING_ON dates in the dataset
+SELECT 
+  min(posted_on) as min_date,
+  max(posted_on) as max_date
+FROM 
+  `rent-data-362500.Rent_Data.Rent`;
+  
+--Find the minimum and maximum RENT costs in the dataset
+SELECT 
+  MIN(RENT) AS MIN_RENT,
+  MAX(RENT) AS MAX_RENT
+FROM 
+  `rent-data-362500.Rent_Data.Rent`;
+  
+--Find the minimum and maximum SIZE units in the dataset
+SELECT 
+  MIN(SIZE) AS MINIMUM_SIZE,
+  MAX(SIZE) AS MAXIMUM_SIZE
+FROM 
+   `rent-data-362500.Rent_Data.Rent`
+   
+--Find the number of houses grouped by the TENANT_PREFERRED column in descending order in the dataset.
+SELECT 
+  Tenant_Preferred,
+  COUNT(Tenant_Preferred) AS COUNT_OF_UNITS
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+GROUP BY Tenant_Preferred
+ORDER BY COUNT_OF_UNITS DESC;
+
+--Find the number of houses grouped by the CITY column in descending order in the dataset.
+SELECT 
+  CITY, 
+  COUNT(CITY) AS NUM_OF_UNITS
+FROM 
+   `rent-data-362500.Rent_Data.Rent`
+GROUP BY 
+  CITY
+ORDER BY NUM_OF_UNITS DESC;
+
+--Find the number of houses available for rent by CITY, with the minimum, maximum, and average rents; that is grouped by CITY and ordered in descending by the number of houses available.
+SELECT
+  CITY,
+  COUNT(CITY) AS NUM_OF_RENTALS,
+  MIN(RENT) AS MINIMUM_RENT,
+  MAX(RENT) AS MAXIMUM_RENT,
+  ROUND(AVG(RENT),0) AS AVG_RENT
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+GROUP BY 
+  CITY
+ORDER BY 
+  NUM_OF_RENTALS DESC;
+
+--Find the number of postings by CITY in the dataset that is grouped by the posting date and ordered in ascending value by the posting date. 
+SELECT 
+  POSTED_ON,
+  COUNT(CITY) AS NUM_OF_POSTINGS,
+FROM 
+  `rent-data-362500.Rent_Data.Rent`
+GROUP BY 
+  POSTED_ON
+ORDER BY
+  POSTED_ON ASC;
+
+--Find the top 5 most expensive house rents available in the dataset grouped by the cost of rent in descending order.
+SELECT 
+  *
+FROM
+   `rent-data-362500.Rent_Data.Rent`
+ORDER BY
+  RENT DESC
+LIMIT 
+  5;
+
+--Find the number and percentage of houses available for rent by point that are grouped by the POINT_OF_CONTACT column and sorted by descending order by the number of houses in the dataset. 
+SELECT 
+  Point_of_Contact,
+  COUNT(POINT_OF_CONTACT) AS NUM_OF_UNITS,
+  ROUND((COUNT(Point_of_Contact)/(SELECT COUNT(*) FROM  `rent-data-362500.Rent_Data.Rent`)) *100,2) AS PERCENTAGE
+FROM
+   `rent-data-362500.Rent_Data.Rent`
+GROUP BY
+  Point_of_Contact
+ORDER BY
+  NUM_OF_UNITS DESC;
